@@ -9,9 +9,28 @@
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
+          v-if="!headerStore.showBackButton"
         />
-        <q-toolbar-title> Quasar App </q-toolbar-title>
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          flat
+          dense
+          round
+          icon="arrow_back"
+          aria-label="Voltar"
+          @click="backButtonClick"
+          v-if="headerStore.showBackButton"
+        />
+        <q-toolbar-title class="text-center">
+          {{ headerStore.pageTitle }}
+        </q-toolbar-title>
+        <q-btn
+          flat
+          dense
+          round
+          icon="help_outline"
+          aria-label="Ajuda"
+          @click="helpButtonClick"
+        />
       </q-toolbar>
     </q-header>
 
@@ -32,6 +51,7 @@
     </q-drawer>
 
     <q-page-container>
+      <!-- <div> -->
       <div class="q-pa-md">
         <router-view />
       </div>
@@ -40,13 +60,19 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
 import { ref } from "vue";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
+
+import { useHeaderStore } from "stores/header-store";
 
 import DrawerMenuList from "./drawer-menu-list.js";
 import DrawerItemComponent from "src/components/layouts/Drawer/drawer-item.vue";
 
 const $q = useQuasar();
+const router = useRouter();
+const headerStore = useHeaderStore();
+
 const leftDrawerOpen = ref(false);
 const drawerList = ref(DrawerMenuList);
 
@@ -54,5 +80,11 @@ $q.dark.set(true);
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+function backButtonClick() {
+  router.back();
+}
+function helpButtonClick() {
+  console.log("MainLayout.vue / helpButtonClick");
 }
 </script>
