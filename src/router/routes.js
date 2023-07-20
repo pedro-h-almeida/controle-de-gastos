@@ -20,13 +20,13 @@ const routes = [
           {
             path: "",
             name: "Cartoes",
-            component: () => import("src/pages/Cartoes/CreditCardList.vue"),
+            component: () => import("src/pages/Cartoes/CartoesLista.vue"),
             meta: { pageTitle: "Cartões" },
           },
           {
             path: "detalhes",
             name: "Detalhes do Cartao",
-            component: () => import("src/pages/Cartoes/CreditCardExpenses.vue"),
+            component: () => import("src/pages/Cartoes/CartoesDespesas.vue"),
             meta: { pageTitle: "Detalhes do Cartão", showBackButton: true },
           },
         ],
@@ -35,7 +35,7 @@ const routes = [
       {
         path: "/despesas",
         name: "Despesas",
-        component: () => import("src/pages/ExpensesList.vue"),
+        component: () => import("src/pages/ListaDespesas.vue"),
         meta: { pageTitle: "Despesas" },
       },
     ],

@@ -13,7 +13,7 @@
             <div class="text-weight-bolder">Atual:</div>
             &nbsp;
             <div class="">
-              {{ formatMoneyValue(props.gastoAtual) }}
+              {{ formatarDinheiro(props.gastoAtual) }}
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="text-weight-bolder">Limite:</div>
             &nbsp;
             <div class="">
-              {{ formatMoneyValue(props.limiteCartao) }}
+              {{ formatarDinheiro(props.limiteCartao) }}
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
         label="Detalhes"
         icon-right="fas fa-circle-info"
         style="font-size: 12px"
-        @click="btnDetalhesClick"
+        @click="btnClick_Detalhes"
       />
     </q-card-actions>
   </q-card>
@@ -56,14 +56,14 @@ const emit = defineEmits(["detalhesClick"]);
 
 const bColor = `background-color: ${props.cor};`;
 
-function formatMoneyValue(value) {
+function formatarDinheiro(value) {
   return value.toLocaleString("pt-br", {
     style: "currency",
     currency: "BRL",
   });
 }
 
-function btnDetalhesClick() {
+function btnClick_Detalhes() {
   emit("detalhesClick");
 }
 </script>

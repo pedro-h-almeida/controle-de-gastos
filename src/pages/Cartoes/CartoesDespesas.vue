@@ -6,7 +6,7 @@
       </q-card-section>
       <q-separator />
       <q-card-section class="q-pa-sm">
-        <MonthYearSelector @changeDate="monthYearSelector_valueChange" />
+        <MonthYearSelector @mudarData="monthYearSelector_valueChange" />
       </q-card-section>
       <q-separator />
       <q-card-section class="q-pa-sm">
@@ -73,7 +73,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { date } from "quasar";
-import MonthYearSelector from "src/components/pages/Cartoes/month-year-selector.vue";
+import MonthYearSelector from "src/components/pages/Cartoes/mes-ano-selector.vue";
 
 const creditCardName = "Caixa";
 const bColor = `background-color: #033f99;`;
@@ -81,8 +81,8 @@ const creditCardLimit = 2000;
 const monthlyExpenses = ref(0);
 const monthYearSelector_value = {
   day: "01",
-  month: "07",
-  year: "1998",
+  mes: "07",
+  ano: "1998",
 };
 const filteredExpensesList = ref([]);
 const creditCardExpensesFullList = [
@@ -131,15 +131,15 @@ const creditCardExpensesFullList = [
 onMounted(() => {
   const currentDate = new Date();
 
-  monthYearSelector_value.month = currentDate.getMonth();
-  monthYearSelector_value.year = currentDate.getUTCFullYear();
+  monthYearSelector_value.mes = currentDate.getMonth();
+  monthYearSelector_value.ano = currentDate.getUTCFullYear();
 
   filterExpensesList();
 });
 
-function monthYearSelector_valueChange({ month, year }) {
-  monthYearSelector_value.month = `${month.id}`;
-  monthYearSelector_value.year = year;
+function monthYearSelector_valueChange({ mes, ano }) {
+  monthYearSelector_value.mes = `${mes.id}`;
+  monthYearSelector_value.ano = ano;
 
   filterExpensesList();
 }
@@ -158,8 +158,8 @@ function filterExpensesList() {
 
 function monthCheck(dates) {
   const filterDate = new Date(
-    monthYearSelector_value.year,
-    monthYearSelector_value.month,
+    monthYearSelector_value.ano,
+    monthYearSelector_value.mes,
     monthYearSelector_value.day
   );
   const expenseStartDateFormatted = date.extractDate(
@@ -197,8 +197,8 @@ function formatMoneyValue(moneyValue) {
 function formatInstallments(startDate, installments) {
   const expenseStartDateFormatted = date.extractDate(startDate, "DD/MM/YYYY");
   const filterDate = new Date(
-    monthYearSelector_value.year,
-    monthYearSelector_value.month,
+    monthYearSelector_value.ano,
+    monthYearSelector_value.mes,
     monthYearSelector_value.day
   );
 

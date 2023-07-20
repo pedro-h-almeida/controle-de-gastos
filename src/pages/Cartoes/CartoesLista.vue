@@ -2,7 +2,7 @@
   <q-page>
     <div class="row">
       <div
-        v-for="(element, index) in cartoesList"
+        v-for="(element, index) in listaCartoes"
         v-bind:key="index"
         class="col-12 q-pb-lg"
       >
@@ -11,7 +11,7 @@
           :cor="element.cor"
           :gastoAtual="element.gastoAtual"
           :limiteCartao="element.limiteCartao"
-          @detalhesClick="irDetalhesCartao(index)"
+          @detalhesClick="btnClick_DetalhesCartao(index)"
         />
       </div>
     </div>
@@ -22,6 +22,7 @@
         label="Adicionar Cartão"
         class="q-pa-md"
         style="border-radius: 20px"
+        @click="btnClick_AdicionarCartao()"
       />
     </q-page-sticky>
   </q-page>
@@ -34,7 +35,7 @@ import { useRouter } from "vue-router";
 import CartaoCardComponent from "src/components/pages/Cartoes/cartao-card.vue";
 
 const router = useRouter();
-const cartoesList = [
+const listaCartoes = [
   {
     nome: "Hipercard",
     cor: "red",
@@ -49,8 +50,12 @@ const cartoesList = [
   },
 ];
 
-function irDetalhesCartao(idCartao) {
+function btnClick_DetalhesCartao(idCartao) {
   console.log("DETALHES CARTÃO: ", idCartao);
   router.push("cartoes/detalhes");
+}
+
+function btnClick_AdicionarCartao() {
+  console.log("btnClick_AdicionarCartao");
 }
 </script>

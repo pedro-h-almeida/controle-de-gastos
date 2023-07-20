@@ -54,7 +54,7 @@
         label="Novo Gasto"
         class="q-pa-md"
         style="border-radius: 20px"
-        @click="newExpenseBtnClick"
+        @click="btnClick_NovoGasto"
       />
     </q-page-sticky>
   </q-page>
@@ -67,7 +67,7 @@ const mes_ano_atual = "FEV/2023";
 const valorAtual = "R$ 200,00";
 const valorDisponivel = "R$ 400,00";
 
-function newExpenseBtnClick() {
+function btnClick_NovoGasto() {
   console.log("NEW EXPENSE BTN CLICK");
 }
 </script>

@@ -7,11 +7,11 @@
         class="font_15"
         color="primary"
         icon="fas fa-arrow-left"
-        @click="decrease"
+        @click="btnClick_Decrease"
       />
     </div>
     <div class="col font_15 flex flex-center">
-      {{ currentMonth.label }} / {{ currentYear }}
+      {{ mesAtual.label }} / {{ anoAtual }}
     </div>
     <div class="col-2">
       <q-btn
@@ -20,7 +20,7 @@
         class="font_15"
         color="primary"
         icon="fas fa-arrow-right"
-        @click="increase"
+        @click="btnClick_Increase"
       />
     </div>
   </div>
@@ -35,11 +35,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
-const emit = defineEmits(["changeDate"]);
+const emit = defineEmits(["mudarData"]);
 
-let currentMonth = ref({ id: 6, label: "JUL" });
-let currentYear = ref(1998);
-const monthList = [
+let mesAtual = ref({ id: 6, label: "JUL" });
+let anoAtual = ref(1998);
+const listaMeses = [
   { id: 0, label: "JAN" },
   { id: 1, label: "FEV" },
   { id: 2, label: "MAR" },
@@ -63,33 +63,33 @@ const monthList = [
 
 onMounted(() => {
   const dataAtual = new Date();
-  currentMonth.value = monthList[dataAtual.getMonth()];
-  currentYear.value = dataAtual.getUTCFullYear();
+  mesAtual.value = listaMeses[dataAtual.getMonth()];
+  anoAtual.value = dataAtual.getUTCFullYear();
 });
 
-function decrease() {
-  if (currentMonth.value.id - 1 === -1) {
-    currentMonth.value = monthList[11];
-    currentYear.value = currentYear.value - 1;
+function btnClick_Decrease() {
+  if (mesAtual.value.id - 1 === -1) {
+    mesAtual.value = listaMeses[11];
+    anoAtual.value = anoAtual.value - 1;
   } else {
-    currentMonth.value = monthList[currentMonth.value.id - 1];
+    mesAtual.value = listaMeses[mesAtual.value.id - 1];
   }
-  emit("changeDate", {
-    month: currentMonth.value,
-    year: currentYear.value,
+  emit("mudarData", {
+    mes: mesAtual.value,
+    ano: anoAtual.value,
   });
 }
 
-function increase() {
-  if (currentMonth.value.id + 1 === 12) {
-    currentMonth.value = monthList[0];
-    currentYear.value = currentYear.value + 1;
+function btnClick_Increase() {
+  if (mesAtual.value.id + 1 === 12) {
+    mesAtual.value = listaMeses[0];
+    anoAtual.value = anoAtual.value + 1;
   } else {
-    currentMonth.value = monthList[currentMonth.value.id + 1];
+    mesAtual.value = listaMeses[mesAtual.value.id + 1];
   }
-  emit("changeDate", {
-    month: currentMonth.value,
-    year: currentYear.value,
+  emit("mudarData", {
+    mes: mesAtual.value,
+    ano: anoAtual.value,
   });
 }
 </script>
