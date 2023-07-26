@@ -34,11 +34,11 @@ export default [
   {
     type: "separator",
   },
-  // {
-  //   index: 0,
-  //   label: 'Sair',
-  //   route: '/login',
-  //   type: 'normal-item',
-  //   icon: 'fas fa-sign-out-alt',
-  // },
+  {
+    index: 0,
+    label: "Sair",
+    route: "/login",
+    type: "normal-item",
+    icon: "fas fa-sign-out-alt",
+  },
 ];

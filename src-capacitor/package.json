@@ -5,9 +5,11 @@
   "author": "Pedro Henrique de Almeida <pedro.henrique.almeida.dev@gmail.com>",
   "private": true,
   "dependencies": {
+    "@capacitor-firebase/authentication": "^5.1.0",
     "@capacitor/android": "^5.0.0",
     "@capacitor/app": "^5.0.0",
     "@capacitor/cli": "^5.0.0",
-    "@capacitor/core": "^5.0.0"
+    "@capacitor/core": "^5.0.0",
+    "firebase": "^10.1.0"
   }
 }

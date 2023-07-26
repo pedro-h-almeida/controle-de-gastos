@@ -1,6 +1,17 @@
 import { h } from "vue";
 import { RouterView } from "vue-router";
 
+import { useUserStore } from "stores/user-store";
+
+const requireUserLogin = (to, from, next) => {
+  const userStore = useUserStore();
+  if (userStore.email === "") {
+    next({ path: "/login", query: { type: "errorLogin" } });
+    return;
+  }
+  next();
+};
+
 const routes = [
   {
     path: "/",
@@ -37,6 +48,14 @@ const routes = [
         component: () => import("src/pages/ListaDespesas.vue"),
         meta: { pageTitle: "Despesas" },
       },
+    ],
+    beforeEnter: requireUserLogin,
+  },
+  {
+    path: "/login",
+    component: () => import("layouts/CleanLayout.vue"),
+    children: [
+      { path: "", component: () => import("src/pages/LoginPage.vue") },
     ],
   },
 
