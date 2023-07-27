@@ -48,7 +48,7 @@ import { useRouter } from "vue-router";
 import SimpleInfoDialog from "../components/SimpleInfoDialog.vue";
 import { useUserStore } from "../stores/user-store.js";
 
-import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+// import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 
 const $q = useQuasar();
 const router = useRouter();
@@ -59,16 +59,16 @@ const input_email = ref("pedro.henrique.almeida.tey@gmail.com");
 const input_password = ref("6s&P5JeWL!6jTcJCsdK#");
 
 function login() {
-  FirebaseAuthentication.signInWithEmailAndPassword({
-    email: input_email.value,
-    password: input_password.value,
-  })
-    .then((res) => {
-      success(res.user);
-    })
-    .catch(() => {
-      displayError("Usuário não encontrado");
-    });
+  // FirebaseAuthentication.signInWithEmailAndPassword({
+  //   email: input_email.value,
+  //   password: input_password.value,
+  // })
+  //   .then((res) => {
+  //     success(res.user);
+  //   })
+  //   .catch(() => {
+  //     displayError("Usuário não encontrado");
+  //   });
 }
 
 function success(params) {
