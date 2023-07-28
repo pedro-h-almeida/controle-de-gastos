@@ -1,43 +1,61 @@
 <template>
-  <q-page padding class="flex flex-center">
-    <div class="full-width q-pa-sm">
-      <!-- <div class="text-h3 text-center">Login</div> -->
-      <q-form @submit="login">
-        <!-- <div class="row flex-center"> -->
-        <!-- <div class="col-12 q-pa-sm"> -->
-        <div class="q-pl-xs text-body1">Email:</div>
-        <q-input
-          filled
-          clearable
-          v-model="input_email"
-          lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
-        />
-        <div class="q-pl-xs q-pt-sm text-body1">Senha:</div>
-        <q-input
-          filled
-          v-model="input_password"
-          lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
-          :type="isPwd ? 'password' : 'text'"
-        >
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd = !isPwd"
-            />
-          </template>
-        </q-input>
-        <!-- </div> -->
-        <q-btn
-          class="q-mt-lg full-width q-pa-sm"
-          label="Entrar"
-          type="submit"
-          color="primary"
-        />
-      </q-form>
-    </div>
+  <q-page>
+    <!-- <q-page padding :style-fn="myTweak"> -->
+    <q-form @submit="login">
+      <!-- <q-form @submit="login" class="full-height"> -->
+      <div class="row flex-center content-center" style="height: 100vh">
+        <!--  -->
+        <div class="col-xs-1 col-md-3 col-lg-4 col-xl-5" />
+        <!--  -->
+        <div class="col-xs-10 col-md-6 col-lg-4 col-xl-2">
+          <div class="q-pl-xs text-body1">Email:</div>
+          <q-input
+            filled
+            clearable
+            v-model="input_email"
+            lazy-rules
+            :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
+          />
+        </div>
+        <!--  -->
+        <div class="col-xs-1 col-md-3 col-lg-4 col-xl-5" />
+        <div class="col-xs-1 col-md-3 col-lg-4 col-xl-5" />
+        <!--  -->
+        <div class="col-xs-10 col-md-6 col-lg-4 col-xl-2">
+          <div class="q-pl-xs q-pt-sm text-body1">Senha:</div>
+          <q-input
+            filled
+            v-model="input_password"
+            lazy-rules
+            :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
+            :type="isPwd ? 'password' : 'text'"
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              />
+            </template>
+          </q-input>
+        </div>
+        <!--  -->
+        <div class="col-xs-1 col-md-3 col-lg-4 col-xl-5" />
+        <div class="col-xs-1 col-md-3 col-lg-4 col-xl-5" />
+        <!--  -->
+        <div class="col-xs-10 col-md-6 col-lg-4 col-xl-2">
+          <q-btn
+            class="q-mt-lg full-width q-pa-sm"
+            label="Entrar"
+            type="submit"
+            color="primary"
+          />
+        </div>
+        <!--  -->
+        <div class="col-xs-1 col-md-3 col-lg-4 col-xl-5" />
+        <!--  -->
+      </div>
+    </q-form>
   </q-page>
 </template>
 
@@ -48,27 +66,48 @@ import { useRouter } from "vue-router";
 import SimpleInfoDialog from "../components/SimpleInfoDialog.vue";
 import { useUserStore } from "../stores/user-store.js";
 
-// import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 
 const $q = useQuasar();
 const router = useRouter();
 const userStore = useUserStore();
+const auth = getAuth();
 
 const isPwd = ref(true);
 const input_email = ref("pedro.henrique.almeida.tey@gmail.com");
 const input_password = ref("6s&P5JeWL!6jTcJCsdK#");
 
 function login() {
-  // FirebaseAuthentication.signInWithEmailAndPassword({
-  //   email: input_email.value,
-  //   password: input_password.value,
-  // })
-  //   .then((res) => {
-  //     success(res.user);
-  //   })
-  //   .catch(() => {
-  //     displayError("Usuário não encontrado");
-  //   });
+  $q.loading.show();
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      signInWithEmailAndPassword(auth, input_email.value, input_password.value)
+        .then((res) => {
+          $q.loading.hide();
+          console.log(res);
+          // Signed in
+          success(res.user);
+          // ...
+        })
+        .catch((error) => {
+          $q.loading.hide();
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
+          displayError(error.message);
+        });
+    })
+    .catch((error) => {
+      $q.loading.hide();
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+      displayError(error.message);
+    });
 }
 
 function success(params) {
@@ -90,6 +129,19 @@ function displayError(error) {
 }
 
 onMounted(() => {
+  auth.signOut();
   userStore.$reset();
 });
+
+// function myTweak(offset) {
+//   // "offset" is a Number (pixels) that refers to the total
+//   // height of header + footer that occupies on screen,
+//   // based on the QLayout "view" prop configuration
+
+//   // this is actually what the default style-fn does in Quasar
+//   return {
+//     minHeight: offset ? `calc(100vh - ${offset}px)` : "100vh",
+//     height: offset ? `calc(100vh - ${offset}px)` : "100vh",
+//   };
+// }
 </script>

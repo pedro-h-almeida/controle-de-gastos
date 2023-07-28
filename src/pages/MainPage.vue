@@ -1,7 +1,7 @@
 <template>
   <q-page>
-    <div class="row">
-      <div class="col-12">
+    <div class="row justify-center">
+      <div class="col-xs-12 col-md-6 col-lg-4 col-xl-2">
         <q-card bordered>
           <!-- DATA/MES ATUAL -->
           <q-card-section>

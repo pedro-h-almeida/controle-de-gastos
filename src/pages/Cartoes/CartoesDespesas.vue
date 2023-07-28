@@ -1,73 +1,79 @@
 <template>
   <q-page>
-    <q-card bordered>
-      <q-card-section
-        class="q-pa-sm"
-        :style="`background-color: ${infoCartao.bColor};`"
-      >
-        <div class="text-h4 text-center">{{ infoCartao.nome }}</div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section class="q-pa-sm">
-        <MonthYearSelector @mudarData="monthYearSelector_valueChange" />
-      </q-card-section>
-      <q-separator />
-      <q-card-section class="q-pa-sm">
-        <q-list>
-          <template v-if="listaGastoCartao.length > 0">
-            <template
-              v-for="(element, index) in listaGastoCartao"
-              v-bind:key="index"
-            >
-              <q-separator v-if="index !== 0" />
-              <q-item>
-                <q-item-section>
-                  <q-item-label>{{ element.descricao }}</q-item-label>
-                  <q-item-label caption>{{
-                    formatarDinheiro(element.valorTotal / element.parcelaTotal)
-                  }}</q-item-label>
-                </q-item-section>
+    <div class="row justify-center">
+      <div class="col-xs-12 col-md-6 col-lg-4 col-xl-2">
+        <q-card bordered>
+          <q-card-section
+            class="q-pa-sm"
+            :style="`background-color: ${infoCartao.bColor};`"
+          >
+            <div class="text-h4 text-center">{{ infoCartao.nome }}</div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section class="q-pa-sm">
+            <MonthYearSelector @mudarData="monthYearSelector_valueChange" />
+          </q-card-section>
+          <q-separator />
+          <q-card-section class="q-pa-sm">
+            <q-list>
+              <template v-if="listaGastoCartao.length > 0">
+                <template
+                  v-for="(element, index) in listaGastoCartao"
+                  v-bind:key="index"
+                >
+                  <q-separator v-if="index !== 0" />
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label>{{ element.descricao }}</q-item-label>
+                      <q-item-label caption>{{
+                        formatarDinheiro(
+                          element.valorTotal / element.parcelaTotal
+                        )
+                      }}</q-item-label>
+                    </q-item-section>
 
-                <q-item-section side top>
-                  <q-item-label caption>{{
-                    element.parcelaAtual
-                  }}</q-item-label>
+                    <q-item-section side top>
+                      <q-item-label caption>{{
+                        element.parcelaAtual
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </template>
+              <template v-else>
+                <q-item-section class="q-pa-md">
+                  <q-item-label class="text-h6 text-center"
+                    >Não a nenhum gasto neste mês, parabéns!</q-item-label
+                  >
                 </q-item-section>
-              </q-item>
-            </template>
-          </template>
-          <template v-else>
-            <q-item-section class="q-pa-md">
-              <q-item-label class="text-h6 text-center"
-                >Não a nenhum gasto neste mês, parabéns!</q-item-label
-              >
-            </q-item-section>
-          </template>
-        </q-list>
-      </q-card-section>
-      <q-separator />
-      <q-card-section
-        class="q-pa-md"
-        :style="`background-color: ${infoCartao.bColor};`"
-      >
-        <div class="row justify-between">
-          <div class="col">
-            <div class="row justify-start">
-              <div class="text-weight-bolder">Total:</div>
-              &nbsp;
-              <div class="">{{ formatarDinheiro(despesasDoMes) }}</div>
+              </template>
+            </q-list>
+          </q-card-section>
+          <q-separator />
+          <q-card-section
+            class="q-pa-md"
+            :style="`background-color: ${infoCartao.bColor};`"
+          >
+            <div class="row justify-between">
+              <div class="col">
+                <div class="row justify-start">
+                  <div class="text-weight-bolder">Total:</div>
+                  &nbsp;
+                  <div class="">{{ formatarDinheiro(despesasDoMes) }}</div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="row justify-end">
+                  <div class="text-weight-bolder">Limite:</div>
+                  &nbsp;
+                  <div class="">{{ formatarDinheiro(infoCartao.limite) }}</div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col">
-            <div class="row justify-end">
-              <div class="text-weight-bolder">Limite:</div>
-              &nbsp;
-              <div class="">{{ formatarDinheiro(infoCartao.limite) }}</div>
-            </div>
-          </div>
-        </div>
-      </q-card-section>
-    </q-card>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </q-page>
 </template>
 

@@ -4,7 +4,7 @@
       <div
         v-for="(element, index) in listaCartoes"
         v-bind:key="index"
-        class="col-12 q-pb-lg"
+        class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 q-pa-lg"
       >
         <CartaoCardComponent
           :nome="element.nome"
@@ -57,5 +57,6 @@ function btnClick_DetalhesCartao(idCartao) {
 
 function btnClick_AdicionarCartao() {
   console.log("btnClick_AdicionarCartao");
+  router.push("cartoes/cadastro");
 }
 </script>

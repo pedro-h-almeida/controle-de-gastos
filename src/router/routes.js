@@ -2,14 +2,26 @@ import { h } from "vue";
 import { RouterView } from "vue-router";
 
 import { useUserStore } from "stores/user-store";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const requireUserLogin = (to, from, next) => {
-  const userStore = useUserStore();
-  if (userStore.email === "") {
-    next({ path: "/login", query: { type: "errorLogin" } });
-    return;
-  }
-  next();
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log(user);
+      next();
+    } else {
+      next({ path: "/login", query: { type: "errorLogin" } });
+      return;
+    }
+  });
+  // const userStore = useUserStore();
+  // if (!userStore.isUserLoggedIn) {
+  //   next({ path: "/login", query: { type: "errorLogin" } });
+  //   return;
+  // }
+  // next();
 };
 
 const routes = [
@@ -39,6 +51,12 @@ const routes = [
             name: "Detalhes do Cartao",
             component: () => import("src/pages/Cartoes/CartoesDespesas.vue"),
             meta: { pageTitle: "Detalhes do Cartão", showBackButton: true },
+          },
+          {
+            path: "cadastro",
+            name: "Cadastrar Cartao",
+            component: () => import("src/pages/Cartoes/CartoesCadastro.vue"),
+            meta: { pageTitle: "Cadastrar Cartão", showBackButton: true },
           },
         ],
       },

@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-2">
+    <div class="col-xs-2 col-sm-1">
       <q-btn
         flat
         round
@@ -10,10 +10,10 @@
         @click="btnClick_Decrease"
       />
     </div>
-    <div class="col font_15 flex flex-center">
+    <div class="col-xs-8 col-sm-10 font_15 flex flex-center">
       {{ mesAtual.label }} / {{ anoAtual }}
     </div>
-    <div class="col-2">
+    <div class="col-xs-2 col-sm-1 flex justify-end">
       <q-btn
         flat
         round
