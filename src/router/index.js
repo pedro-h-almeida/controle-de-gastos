@@ -8,6 +8,7 @@ import {
 import routes from "./routes";
 
 import { useHeaderStore } from "stores/header-store";
+import { useUserStore } from "stores/user-store";
 
 /*
  * If not building with SSR mode, you can
@@ -33,6 +34,14 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach(async (to, from) => {
+    console.log("oi");
+    const userStore = useUserStore();
+    if (!userStore.isUserLoggedIn && to.name !== "Login") {
+      return { name: "Login" };
+    }
   });
 
   Router.afterEach((to, from) => {

@@ -41,10 +41,13 @@
         <div v-for="(element, index) in drawerList" v-bind:key="index">
           <q-separator v-if="element.type === 'separator'" spaced />
           <DrawerItemComponent
-            v-if="element.type === 'normal-item'"
+            v-if="
+              element.type === 'normal-item' || element.type === 'log-out-item'
+            "
             :label="element.label"
             :route="element.route"
             :icon="element.icon"
+            :type="element.type"
           />
         </div>
       </q-list>
@@ -68,6 +71,7 @@ import { useHeaderStore } from "stores/header-store";
 
 import DrawerMenuList from "./drawer-menu-list.js";
 import DrawerItemComponent from "src/components/layouts/Drawer/drawer-item.vue";
+import DrawerItemLogOutComponent from "src/components/layouts/Drawer/drawer-item-log-out.vue";
 
 const $q = useQuasar();
 const router = useRouter();

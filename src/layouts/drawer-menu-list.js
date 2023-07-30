@@ -38,7 +38,7 @@ export default [
     index: 0,
     label: "Sair",
     route: "/login",
-    type: "normal-item",
+    type: "log-out-item",
     icon: "fas fa-sign-out-alt",
   },
 ];

@@ -1,12 +1,5 @@
 <template>
-  <q-item
-    class="item-color"
-    clickable
-    :exact="props.route === '/'"
-    v-ripple
-    :to="props.route"
-    @click="logOutAction"
-  >
+  <q-item class="item-color" clickable v-ripple @click="logOutAction">
     <q-item-section avatar class="item-section-avatar" v-if="props.icon">
       <q-icon style="font-size: 20px" :name="props.icon" />
     </q-item-section>
@@ -44,16 +37,12 @@ import { getAuth } from "firebase/auth";
 
 const props = defineProps({
   label: String,
-  route: String,
   icon: String,
-  type: String,
 });
 
 const auth = getAuth();
 
 function logOutAction() {
-  if (props.type === "log-out-item") {
-    auth.signOut();
-  }
+  auth.signOut();
 }
 </script>

@@ -5,17 +5,17 @@ import { useUserStore } from "stores/user-store";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const requireUserLogin = (to, from, next) => {
-  const auth = getAuth();
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log(user);
-      next();
-    } else {
-      next({ path: "/login", query: { type: "errorLogin" } });
-      return;
-    }
-  });
+  // const auth = getAuth();
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     console.log(user);
+  //     next();
+  //   } else {
+  //     next({ path: "/login", query: { type: "errorLogin" } });
+  //     return;
+  //   }
+  // });
+  // console.log("oi");
   // const userStore = useUserStore();
   // if (!userStore.isUserLoggedIn) {
   //   next({ path: "/login", query: { type: "errorLogin" } });
@@ -67,13 +67,17 @@ const routes = [
         meta: { pageTitle: "Despesas" },
       },
     ],
-    beforeEnter: requireUserLogin,
+    // beforeEach: requireUserLogin,
   },
   {
     path: "/login",
     component: () => import("layouts/CleanLayout.vue"),
     children: [
-      { path: "", component: () => import("src/pages/LoginPage.vue") },
+      {
+        path: "",
+        name: "Login",
+        component: () => import("src/pages/LoginPage.vue"),
+      },
     ],
   },
 
