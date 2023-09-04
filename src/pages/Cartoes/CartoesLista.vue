@@ -34,6 +34,10 @@
 import { useRouter } from "vue-router";
 import CartaoCardComponent from "src/components/pages/Cartoes/cartao-card.vue";
 
+import { getCartoes } from "../../services/firestore/getCartoes.js";
+
+getCartoes();
+
 const router = useRouter();
 const listaCartoes = [
   {

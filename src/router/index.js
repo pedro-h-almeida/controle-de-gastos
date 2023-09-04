@@ -8,7 +8,7 @@ import {
 import routes from "./routes";
 
 import { useHeaderStore } from "stores/header-store";
-import { useUserStore } from "stores/user-store";
+import { getAuth } from "firebase/auth";
 
 /*
  * If not building with SSR mode, you can
@@ -37,18 +37,25 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach(async (to, from) => {
-    console.log("oi");
-    const userStore = useUserStore();
-    if (!userStore.isUserLoggedIn && to.name !== "Login") {
+    const auth = getAuth();
+    const user = await auth.currentUser;
+
+    if (user === null && to.name !== "Login") {
       return { name: "Login" };
     }
+    // * ELSE EXPERIMENTAL
+    // else {
+    //   if (user !== null && to.name === "Login") {
+    //     return { name: "MainPage" };
+    //   }
+    // }
   });
 
   Router.afterEach((to, from) => {
     const headerStore = useHeaderStore();
-    console.log("to: ", to);
-    console.log("from: ", from);
-    console.log("-----------------");
+    // console.log("to: ", to);
+    // console.log("from: ", from);
+    // console.log("-----------------");
     headerStore.pageTitle = to.meta.pageTitle;
     if (to.meta.showBackButton) {
       headerStore.showBackButton = true;
