@@ -1,8 +1,8 @@
 <template>
   <q-card bordered>
-    <!-- NOME CARTÃO -->
+    <!-- DESCRICAO CARTÃO -->
     <q-card-section class="q-pa-sm" :style="bColor">
-      <div class="text-h6 text-center">{{ props.nome }}</div>
+      <div class="text-h6 text-center">{{ props.descricao }}</div>
     </q-card-section>
     <q-separator />
     <!-- PRINCIPAIS INFORMAÇÕES DO CARTÃO -->
@@ -47,7 +47,7 @@
 
 <script setup>
 const props = defineProps({
-  nome: String,
+  descricao: String,
   cor: String,
   gastoAtual: Number,
   limiteCartao: Number,

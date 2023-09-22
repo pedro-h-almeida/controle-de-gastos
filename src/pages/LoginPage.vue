@@ -112,6 +112,7 @@ function login() {
 
 function success(params) {
   userStore.email = params.email;
+  userStore.userUID = params.uid;
   // userStore.$reset();
   router.push("/");
 }

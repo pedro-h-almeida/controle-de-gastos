@@ -2,12 +2,12 @@
   <q-page>
     <div class="row">
       <div
-        v-for="(element, index) in listaCartoes"
+        v-for="(element, index) in cartaoStore.listaCartoes"
         v-bind:key="index"
         class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 q-pa-lg"
       >
         <CartaoCardComponent
-          :nome="element.nome"
+          :descricao="element.descricao"
           :cor="element.cor"
           :gastoAtual="element.gastoAtual"
           :limiteCartao="element.limiteCartao"
@@ -36,7 +36,11 @@ import CartaoCardComponent from "src/components/pages/Cartoes/cartao-card.vue";
 
 import { getCartoes } from "../../services/firestore/getCartoes.js";
 
-getCartoes();
+import { useCartaoStore } from "../../stores/cartao-store.js";
+
+const cartaoStore = useCartaoStore();
+
+// getCartoes();
 
 const router = useRouter();
 const listaCartoes = [

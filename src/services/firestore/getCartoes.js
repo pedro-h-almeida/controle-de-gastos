@@ -6,15 +6,27 @@ import {
   getDocs,
 } from "firebase/firestore";
 
+import { useCartaoStore } from "../../stores/cartao-store.js";
+
 const getCartoes = async () => {
   const db = getFirestore();
 
+  const cartaoStore = useCartaoStore();
+
   const querySnapshot = await getDocs(
-    collection(db, "usuarios", "r9izMulbrCxzgh3wDsLs", "cartoes")
+    collection(db, "usuarios", "02vWGrMfPKaxaogLDUDFCxdJWz02", "cartoes")
   );
   querySnapshot.forEach((doc) => {
+    // cartaoStore.listaCartoes.push(doc.data())
     // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
+    // console.log(doc.id, " => ", doc.data());
+    cartaoStore.listaCartoes.push({
+      id: doc.id,
+      descricao: doc.data().descricao,
+      cor: doc.data().cor,
+      gastoAtual: 0,
+      limiteCartao: doc.data().limite,
+    });
   });
 
   // const docRef = doc(db, "usuarios", "r9izMulbrCxzgh3wDsLs", "cartoes");

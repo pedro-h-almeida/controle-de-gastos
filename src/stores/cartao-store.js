@@ -6,11 +6,15 @@ export const useCartaoStore = defineStore("cartao", () => {
   const cor = ref("");
   const limite = ref();
 
+  const listaCartoes = ref([]);
+
   function $reset() {
     nome.value = "";
     cor.value = "";
     limite.value = null;
+
+    listaCartoes.value = [];
   }
 
-  return { $reset, nome, cor, limite };
+  return { $reset, nome, cor, limite, listaCartoes };
 });

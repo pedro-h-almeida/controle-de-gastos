@@ -40,15 +40,28 @@ export default route(function (/* { store, ssrContext } */) {
     const auth = getAuth();
     const user = await auth.currentUser;
 
-    if (user === null && to.name !== "Login") {
-      return { name: "Login" };
-    }
-    // * ELSE EXPERIMENTAL
+    console.log("------ USER: ", user);
+    console.log("------ ROTA: ", to.name);
+
+    // if (user === null && to.name !== "Login") {
+    //   return { name: "Login" };
+    // }
+    // // * ELSE EXPERIMENTAL
     // else {
     //   if (user !== null && to.name === "Login") {
     //     return { name: "MainPage" };
+    //   } else {
+    //     return { name: "Login" };
     //   }
     // }
+    if (user === null && to.name !== "Login") {
+      return { name: "Login" };
+    } else {
+      if (user !== null && to.name === "Login") {
+        console.log("Volta Main Page");
+        return { name: "MainPage" };
+      }
+    }
   });
 
   Router.afterEach((to, from) => {
