@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered>
+  <q-card flat>
     <!-- DESCRICAO CARTÃO -->
     <q-card-section class="q-pa-sm" :style="bColor">
       <div class="text-h6 text-center">{{ props.descricao }}</div>

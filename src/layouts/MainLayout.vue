@@ -54,8 +54,7 @@
     </q-drawer>
 
     <q-page-container>
-      <!-- <div> -->
-      <div class="q-pa-md">
+      <div>
         <router-view />
       </div>
     </q-page-container>

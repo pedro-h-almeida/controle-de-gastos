@@ -1,5 +1,15 @@
 <template>
   <q-page>
+    <div class="row q-pt-md q-pb-sm q-px-lg">
+      <div class="col">
+        <q-card bordered>
+          <!-- DESCRICAO CARTÃO -->
+          <q-card-section class="q-pa-sm">
+            <MonthYearSelector @mudarData="monthYearSelector_valueChange" />
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
     <div class="row">
       <div
         v-for="(element, index) in cartaoStore.listaCartoes"
@@ -36,6 +46,7 @@ import { useQuasar } from "quasar";
 import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import CartaoCardComponent from "src/components/pages/Cartoes/cartao-card.vue";
+import MonthYearSelector from "src/components/month-year-selector.vue";
 
 import { useCartaoStore } from "../../stores/cartao-store.js";
 
@@ -55,10 +66,14 @@ const db = useFirestore();
 const cartaoStore = useCartaoStore();
 const router = useRouter();
 
-const date = new Date();
-const dataAtual = new Date(date.getFullYear(), date.getMonth(), 1);
+const monthYearSelector_value = {
+  day: "01",
+  mes: "07",
+  ano: "1998",
+};
 
 async function getCartoesDB() {
+  cartaoStore.listaCartoes = [];
   $q.loading.show();
   const cartoesDb = query(
     collection(db, "usuarios", user.value.uid, "cartoes"),
@@ -89,7 +104,11 @@ async function getGastosCartaoDB(id) {
       where("tipo", "==", 0),
       where("refUsuario", "==", String(user.value.uid)),
       where("refCartao", "==", String(id)),
-      where("dataFim", ">=", dataAtual),
+      where(
+        "dataFim",
+        ">=",
+        new Date(monthYearSelector_value.ano, monthYearSelector_value.mes, 1),
+      ),
     ),
   );
 
@@ -103,6 +122,13 @@ async function getGastosCartaoDB(id) {
   return gastos;
 }
 
+function monthYearSelector_valueChange({ mes, ano }) {
+  monthYearSelector_value.mes = `${mes.id}`;
+  monthYearSelector_value.ano = ano;
+
+  getCartoesDB();
+}
+
 function btnClick_DetalhesCartao(cartao) {
   cartaoStore.id = cartao.id;
   cartaoStore.descricao = cartao.descricao;
@@ -112,11 +138,14 @@ function btnClick_DetalhesCartao(cartao) {
 }
 
 function btnClick_AdicionarCartao() {
-  console.log("btnClick_AdicionarCartao");
   router.push("cartoes/cadastro");
 }
 
 onMounted(() => {
+  const currentDate = new Date();
+
+  monthYearSelector_value.mes = currentDate.getMonth();
+  monthYearSelector_value.ano = currentDate.getUTCFullYear();
   getCartoesDB();
 });
 

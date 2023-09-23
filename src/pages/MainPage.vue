@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-lg">
     <div class="row justify-center">
       <div class="col-xs-12 col-md-6 col-lg-4 col-xl-2">
         <q-card bordered>
@@ -63,9 +63,11 @@
 <style lang="scss" scoped></style>
 
 <script setup>
+import { ref } from "vue";
+
 const mes_ano_atual = "FEV/2023";
-const valorAtual = "R$ 200,00";
-const valorDisponivel = "R$ 400,00";
+const valorAtual = ref("R$ 200,00");
+const valorDisponivel = ref("R$ 400,00");
 
 function btnClick_NovoGasto() {
   console.log("NEW EXPENSE BTN CLICK");

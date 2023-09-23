@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-lg">
     <div class="row justify-center">
       <div class="col-xs-12 col-md-6 col-lg-4 col-xl-2">
         <q-card bordered>
@@ -84,7 +84,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useQuasar, date } from "quasar";
-import MonthYearSelector from "src/components/pages/Cartoes/month-year-selector.vue";
+import MonthYearSelector from "src/components/month-year-selector.vue";
 
 import { useCartaoStore } from "../../stores/cartao-store.js";
 import { useFirestore, useCurrentUser } from "vuefire";
