@@ -6,7 +6,7 @@
           <!-- DATA/MES ATUAL -->
           <q-card-section>
             <div class="text-h5 text-weight-bold">
-              {{ mes_ano_atual }}
+              {{ mesAtual.label }} / {{ anoAtual }}
             </div>
           </q-card-section>
           <q-separator inset />
@@ -18,7 +18,7 @@
                   <div class="text-weight-bolder">Atual:</div>
                   &nbsp;
                   <div class="">
-                    {{ valorAtual }}
+                    {{ formatarDinheiro(valorAtual) }}
                   </div>
                 </div>
               </div>
@@ -27,7 +27,7 @@
                   <div class="text-weight-bolder">Disponível:</div>
                   &nbsp;
                   <div class="">
-                    {{ valorDisponivel }}
+                    {{ formatarDinheiro(valorDisponivel) }}
                   </div>
                 </div>
               </div>
@@ -63,13 +63,97 @@
 <style lang="scss" scoped></style>
 
 <script setup>
-import { ref } from "vue";
+import { useQuasar } from "quasar";
 
-const mes_ano_atual = "FEV/2023";
-const valorAtual = ref("R$ 200,00");
-const valorDisponivel = ref("R$ 400,00");
+import { onMounted, ref } from "vue";
+
+import { useFirestore, useCurrentUser } from "vuefire";
+import {
+  collection,
+  where,
+  and,
+  query,
+  getDocs,
+  orderBy,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+
+const $q = useQuasar();
+const user = useCurrentUser();
+const db = useFirestore();
+
+let mesAtual = ref({ id: 6, label: "JUL" });
+let anoAtual = ref(1998);
+const valorAtual = ref(0);
+const valorDisponivel = ref(0);
+
+const listaMeses = [
+  { id: 0, label: "JAN" },
+  { id: 1, label: "FEV" },
+  { id: 2, label: "MAR" },
+  { id: 3, label: "ABR" },
+  { id: 4, label: "MAI" },
+  { id: 5, label: "JUN" },
+  { id: 6, label: "JUL" },
+  { id: 7, label: "AGO" },
+  { id: 8, label: "SET" },
+  { id: 9, label: "OUT" },
+  { id: 10, label: "NOV" },
+  { id: 11, label: "DEZ" },
+];
 
 function btnClick_NovoGasto() {
   console.log("NEW EXPENSE BTN CLICK");
 }
+
+async function getUserValorDisponivel() {
+  $q.loading.show();
+  const docRef = doc(db, "usuarios", user.value.uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+    valorDisponivel.value = docSnap.data().valorDisponivel;
+    for (const doc of docSnap.data().despesaFixa) {
+      valorAtual.value += doc.valor;
+    }
+    getUserDespesasMes();
+  } else {
+    console.log("No such document!");
+    $q.loading.hide();
+  }
+}
+
+async function getUserDespesasMes(id) {
+  const despesasQuery = query(
+    collection(db, "despesas"),
+    and(
+      where("refUsuario", "==", String(user.value.uid)),
+      where("dataFim", ">=", new Date(anoAtual.value, mesAtual.value.id, 1)),
+    ),
+  );
+
+  const despesasQuerySnapshot = await getDocs(despesasQuery);
+
+  for (const doc of despesasQuerySnapshot.docs) {
+    valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
+  }
+  $q.loading.hide();
+}
+
+function formatarDinheiro(value) {
+  return value.toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
+}
+
+onMounted(() => {
+  const dataAtual = new Date();
+  mesAtual.value = listaMeses[dataAtual.getMonth()];
+  anoAtual.value = dataAtual.getUTCFullYear();
+
+  getUserValorDisponivel();
+});
 </script>
