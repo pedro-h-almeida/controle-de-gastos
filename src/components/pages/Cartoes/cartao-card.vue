@@ -10,19 +10,32 @@
       <div class="row">
         <div class="col-12">
           <div class="row">
-            <div class="text-weight-bolder">Atual:</div>
+            <div class="text-weight-bolder">Mês:</div>
             &nbsp;
             <div class="">
-              {{ formatarDinheiro(props.gastoAtual) }}
+              {{ formatarDinheiro(props.gastoMes) }}
             </div>
           </div>
         </div>
         <div class="col-12">
           <div class="row">
-            <div class="text-weight-bolder">Limite:</div>
-            &nbsp;
-            <div class="">
-              {{ formatarDinheiro(props.limiteCartao) }}
+            <div class="col">
+              <div class="row">
+                <div class="text-weight-bolder">Total:</div>
+                &nbsp;
+                <div class="">
+                  {{ formatarDinheiro(props.gastoTotal) }}
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="row justify-end">
+                <div class="text-weight-bolder">Limite:</div>
+                &nbsp;
+                <div class="">
+                  {{ formatarDinheiro(props.limiteCartao) }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -49,7 +62,8 @@
 const props = defineProps({
   descricao: String,
   cor: String,
-  gastoAtual: Number,
+  gastoTotal: Number,
+  gastoMes: Number,
   limiteCartao: Number,
 });
 const emit = defineEmits(["detalhesClick"]);

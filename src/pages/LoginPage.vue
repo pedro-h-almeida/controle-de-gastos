@@ -64,20 +64,20 @@ import { useQuasar } from "quasar";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import SimpleInfoDialog from "../components/SimpleInfoDialog.vue";
-import { useUserStore } from "../stores/user-store.js";
+// import { useUserStore } from "../stores/user-store.js";
 
 import {
-  getAuth,
   signInWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence,
   browserSessionPersistence,
 } from "firebase/auth";
+import { useFirebaseAuth } from "vuefire";
 
 const $q = useQuasar();
 const router = useRouter();
-const userStore = useUserStore();
-const auth = getAuth();
+// const userStore = useUserStore();
+const auth = useFirebaseAuth();
 
 const isPwd = ref(true);
 const input_email = ref("pedro.henrique.almeida.tey@gmail.com");
@@ -85,34 +85,21 @@ const input_password = ref("6s&P5JeWL!6jTcJCsdK#");
 
 function login() {
   $q.loading.show();
-  setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      signInWithEmailAndPassword(auth, input_email.value, input_password.value)
-        .then((res) => {
-          $q.loading.hide();
-          console.log(res);
-          // Signed in
-          success(res.user);
-          // ...
-        })
-        .catch((error) => {
-          $q.loading.hide();
-          // const errorCode = error.code;
-          // const errorMessage = error.message;
-          displayError(error.message);
-        });
+  signInWithEmailAndPassword(auth, input_email.value, input_password.value)
+    .then((res) => {
+      $q.loading.hide();
+      console.log(res);
+      success();
     })
     .catch((error) => {
       $q.loading.hide();
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
       displayError(error.message);
     });
 }
 
 function success(params) {
-  userStore.email = params.email;
-  userStore.userUID = params.uid;
+  // userStore.email = params.email;
+  // userStore.userUID = params.uid;
   // userStore.$reset();
   router.push("/");
 }
@@ -131,7 +118,7 @@ function displayError(error) {
 
 onMounted(() => {
   auth.signOut();
-  userStore.$reset();
+  // userStore.$reset();
 });
 
 // function myTweak(offset) {

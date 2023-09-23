@@ -9,9 +9,10 @@
         <CartaoCardComponent
           :descricao="element.descricao"
           :cor="element.cor"
-          :gastoAtual="element.gastoAtual"
+          :gastoTotal="element.gastoTotal"
+          :gastoMes="element.gastoMes"
           :limiteCartao="element.limiteCartao"
-          @detalhesClick="btnClick_DetalhesCartao(index)"
+          @detalhesClick="btnClick_DetalhesCartao(element.id)"
         />
       </div>
     </div>
@@ -31,32 +32,99 @@
 <style lang="scss" scoped></style>
 
 <script setup>
+import { useQuasar } from "quasar";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import CartaoCardComponent from "src/components/pages/Cartoes/cartao-card.vue";
 
-import { getCartoes } from "../../services/firestore/getCartoes.js";
-
 import { useCartaoStore } from "../../stores/cartao-store.js";
 
+import { useFirestore, useCurrentUser } from "vuefire";
+import {
+  collection,
+  where,
+  and,
+  query,
+  getDocs,
+  orderBy,
+} from "firebase/firestore";
+
+const $q = useQuasar();
+const user = useCurrentUser();
+const db = useFirestore();
 const cartaoStore = useCartaoStore();
-
-// getCartoes();
-
 const router = useRouter();
-const listaCartoes = [
-  {
-    nome: "Hipercard",
-    cor: "red",
-    gastoAtual: 150.0,
-    limiteCartao: 350.0,
-  },
-  {
-    nome: "Caixa",
-    cor: "#730659",
-    gastoAtual: 50.0,
-    limiteCartao: 50.0,
-  },
-];
+
+const date = new Date();
+const dataAtual = new Date(date.getFullYear(), date.getMonth(), 1);
+
+async function getCartoesDB() {
+  $q.loading.show();
+  const cartoesDb = query(
+    collection(db, "usuarios", user.value.uid, "cartoes"),
+    orderBy("createdAt", "asc"),
+  );
+  const cartoesDbQuerySnapshot = await getDocs(cartoesDb);
+
+  for (const doc of cartoesDbQuerySnapshot.docs) {
+    const gastos = await getGastosCartaoDB(doc.id);
+    cartaoStore.listaCartoes.push({
+      id: doc.id,
+      descricao: doc.data().descricao,
+      cor: doc.data().cor,
+      gastoTotal: gastos.total,
+      gastoMes: gastos.mes,
+      limiteCartao: doc.data().limite,
+    });
+  }
+  $q.loading.hide();
+}
+
+async function getGastosCartaoDB(id) {
+  const gastos = { total: 0, mes: 0 };
+
+  const despesasQuery = query(
+    collection(db, "despesas"),
+    and(
+      where("tipo", "==", 0),
+      where("refUsuario", "==", String(user.value.uid)),
+      where("refCartao", "==", String(id)),
+      where("dataFim", ">=", dataAtual),
+    ),
+  );
+
+  const despesasQuerySnapshot = await getDocs(despesasQuery);
+
+  for (const doc of despesasQuerySnapshot.docs) {
+    gastos.total += doc.data().valorTotal;
+    gastos.mes += doc.data().valorTotal / doc.data().parcelas;
+  }
+
+  return gastos;
+  // querySnapshot.forEach((doc) => {
+  //   gastosTotal += doc.data().valorTotal;
+  //   gastosMes += doc.data().valorTotal / doc.data().parcelas;
+  //   // console.log(doc.id, " => ", doc.data());
+  // });
+  // return { total: gastosTotal, mes: gastosMes };
+}
+
+// function getGastosCartaoDB(id) {
+//   const despesas = useCollection(
+//     query(
+//       collection(db, "despesas"),
+//       and(
+//         where("tipo", "==", 0),
+//         where("refUsuario", "==", String(user.value.uid)),
+//         where("refCartao", "==", String(id)),
+//         where("dataFim", ">=", dataAtual),
+//       ),
+//     ),
+//     { once: true, ssrKey: "my-quiz", wait: true },
+//   );
+//   console.log(despesas.value);
+//   console.log(JSON.parse(JSON.stringify(despesas.value)));
+// }
 
 function btnClick_DetalhesCartao(idCartao) {
   console.log("DETALHES CARTÃO: ", idCartao);
@@ -67,4 +135,12 @@ function btnClick_AdicionarCartao() {
   console.log("btnClick_AdicionarCartao");
   router.push("cartoes/cadastro");
 }
+
+onMounted(() => {
+  getCartoesDB();
+});
+
+onBeforeUnmount(() => {
+  cartaoStore.listaCartoes = [];
+});
 </script>

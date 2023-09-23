@@ -8,7 +8,6 @@ import {
 import routes from "./routes";
 
 import { useHeaderStore } from "stores/header-store";
-import { getAuth } from "firebase/auth";
 
 /*
  * If not building with SSR mode, you can
@@ -36,33 +35,22 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach(async (to, from) => {
-    const auth = getAuth();
-    const user = await auth.currentUser;
+  // Router.beforeEach(async (to, from) => {
+  //   const auth = getAuth();
+  //   const user = await auth.currentUser;
 
-    console.log("------ USER: ", user);
-    console.log("------ ROTA: ", to.name);
+  //   console.log("------ USER: ", user);
+  //   console.log("------ ROTA: ", to.name);
 
-    // if (user === null && to.name !== "Login") {
-    //   return { name: "Login" };
-    // }
-    // // * ELSE EXPERIMENTAL
-    // else {
-    //   if (user !== null && to.name === "Login") {
-    //     return { name: "MainPage" };
-    //   } else {
-    //     return { name: "Login" };
-    //   }
-    // }
-    if (user === null && to.name !== "Login") {
-      return { name: "Login" };
-    } else {
-      if (user !== null && to.name === "Login") {
-        console.log("Volta Main Page");
-        return { name: "MainPage" };
-      }
-    }
-  });
+  //   if (user === null && to.name !== "Login") {
+  //     return { name: "Login" };
+  //   } else {
+  //     if (user !== null && to.name === "Login") {
+  //       console.log("Volta Main Page");
+  //       return { name: "MainPage" };
+  //     }
+  //   }
+  // });
 
   Router.afterEach((to, from) => {
     const headerStore = useHeaderStore();

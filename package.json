@@ -11,23 +11,24 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.5",
-    "axios": "^0.21.1",
-    "firebase": "^10.1.0",
-    "pinia": "^2.0.11",
-    "quasar": "^2.12.3",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "@quasar/extras": "^1.16.6",
+    "axios": "^1.5.0",
+    "firebase": "^10.4.0",
+    "pinia": "^2.1.6",
+    "quasar": "^2.12.7",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5",
+    "vuefire": "^3.1.17"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.4.3",
-    "autoprefixer": "^10.4.2",
+    "@quasar/app-vite": "^1.6.2",
+    "autoprefixer": "^10.4.16",
     "dotenv": "^16.3.1",
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-vue": "^9.0.0",
-    "postcss": "^8.4.14",
-    "prettier": "^2.5.1"
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "postcss": "^8.4.30",
+    "prettier": "^3.0.3"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",
