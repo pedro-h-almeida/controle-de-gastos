@@ -82,7 +82,7 @@
 <style lang="scss" scoped></style>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useQuasar, date } from "quasar";
 import MonthYearSelector from "src/components/pages/Cartoes/month-year-selector.vue";
 
@@ -176,5 +176,9 @@ onMounted(() => {
   monthYearSelector_value.ano = currentDate.getUTCFullYear();
 
   getGastosCartaoDB();
+});
+
+onBeforeUnmount(() => {
+  cartaoStore.$reset();
 });
 </script>

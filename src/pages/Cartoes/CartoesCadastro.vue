@@ -9,8 +9,8 @@
           <q-input
             filled
             clearable
-            label="Nome"
-            v-model="cartaoStore.nome"
+            label="Descrição"
+            v-model="cartaoStore.descricao"
             lazy-rules
             :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
           />
@@ -79,8 +79,32 @@
 
 <script setup>
 import { useCartaoStore } from "../../stores/cartao-store.js";
+import { onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+
+import { useFirestore, useCurrentUser } from "vuefire";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 const cartaoStore = useCartaoStore();
+const db = useFirestore();
+const user = useCurrentUser();
+const router = useRouter();
 
-function cadastrar() {}
+async function cadastrar() {
+  const docRef = await addDoc(
+    collection(db, "usuarios", user.value.uid, "cartoes"),
+    {
+      descricao: cartaoStore.descricao,
+      cor: cartaoStore.cor,
+      limite: Number(cartaoStore.limite),
+      createdAt: Timestamp.fromDate(new Date()),
+    },
+  );
+  console.log("Document written with ID: ", docRef.id);
+  router.push("/cartoes");
+}
+
+onBeforeUnmount(() => {
+  cartaoStore.$reset();
+});
 </script>
