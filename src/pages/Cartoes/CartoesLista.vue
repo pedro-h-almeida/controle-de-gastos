@@ -12,7 +12,7 @@
           :gastoTotal="element.gastoTotal"
           :gastoMes="element.gastoMes"
           :limiteCartao="element.limiteCartao"
-          @detalhesClick="btnClick_DetalhesCartao(element.id)"
+          @detalhesClick="btnClick_DetalhesCartao(element)"
         />
       </div>
     </div>
@@ -101,33 +101,13 @@ async function getGastosCartaoDB(id) {
   }
 
   return gastos;
-  // querySnapshot.forEach((doc) => {
-  //   gastosTotal += doc.data().valorTotal;
-  //   gastosMes += doc.data().valorTotal / doc.data().parcelas;
-  //   // console.log(doc.id, " => ", doc.data());
-  // });
-  // return { total: gastosTotal, mes: gastosMes };
 }
 
-// function getGastosCartaoDB(id) {
-//   const despesas = useCollection(
-//     query(
-//       collection(db, "despesas"),
-//       and(
-//         where("tipo", "==", 0),
-//         where("refUsuario", "==", String(user.value.uid)),
-//         where("refCartao", "==", String(id)),
-//         where("dataFim", ">=", dataAtual),
-//       ),
-//     ),
-//     { once: true, ssrKey: "my-quiz", wait: true },
-//   );
-//   console.log(despesas.value);
-//   console.log(JSON.parse(JSON.stringify(despesas.value)));
-// }
-
-function btnClick_DetalhesCartao(idCartao) {
-  console.log("DETALHES CARTÃO: ", idCartao);
+function btnClick_DetalhesCartao(cartao) {
+  cartaoStore.id = cartao.id;
+  cartaoStore.descricao = cartao.descricao;
+  cartaoStore.cor = cartao.cor;
+  cartaoStore.limite = cartao.limiteCartao;
   router.push("cartoes/detalhes");
 }
 

@@ -2,19 +2,21 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useCartaoStore = defineStore("cartao", () => {
-  const nome = ref("");
+  const id = ref("");
+  const descricao = ref("");
   const cor = ref("");
-  const limite = ref();
+  const limite = ref(0);
 
   const listaCartoes = ref([]);
 
   function $reset() {
-    nome.value = "";
+    id.value = "";
+    descricao.value = "";
     cor.value = "";
     limite.value = null;
 
     listaCartoes.value = [];
   }
 
-  return { $reset, nome, cor, limite, listaCartoes };
+  return { $reset, id, descricao, cor, limite, listaCartoes };
 });

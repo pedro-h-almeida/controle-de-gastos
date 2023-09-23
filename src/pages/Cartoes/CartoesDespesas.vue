@@ -5,9 +5,9 @@
         <q-card bordered>
           <q-card-section
             class="q-pa-sm"
-            :style="`background-color: ${infoCartao.bColor};`"
+            :style="`background-color: ${cartaoStore.cor};`"
           >
-            <div class="text-h4 text-center">{{ infoCartao.nome }}</div>
+            <div class="text-h4 text-center">{{ cartaoStore.descricao }}</div>
           </q-card-section>
           <q-separator />
           <q-card-section class="q-pa-sm">
@@ -27,15 +27,17 @@
                       <q-item-label>{{ element.descricao }}</q-item-label>
                       <q-item-label caption>{{
                         formatarDinheiro(
-                          element.valorTotal / element.parcelaTotal
+                          element.valorTotal / element.parcelaTotal,
                         )
                       }}</q-item-label>
                     </q-item-section>
 
                     <q-item-section side top>
-                      <q-item-label caption>{{
-                        element.parcelaAtual
-                      }}</q-item-label>
+                      <q-item-label caption
+                        >{{ element.parcelaAtual }}/{{
+                          element.parcelaTotal
+                        }}</q-item-label
+                      >
                     </q-item-section>
                   </q-item>
                 </template>
@@ -52,7 +54,7 @@
           <q-separator />
           <q-card-section
             class="q-pa-md"
-            :style="`background-color: ${infoCartao.bColor};`"
+            :style="`background-color: ${cartaoStore.cor};`"
           >
             <div class="row justify-between">
               <div class="col">
@@ -66,7 +68,7 @@
                 <div class="row justify-end">
                   <div class="text-weight-bolder">Limite:</div>
                   &nbsp;
-                  <div class="">{{ formatarDinheiro(infoCartao.limite) }}</div>
+                  <div class="">{{ formatarDinheiro(cartaoStore.limite) }}</div>
                 </div>
               </div>
             </div>
@@ -81,10 +83,24 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useQuasar } from "quasar";
+import { useQuasar, date } from "quasar";
 import MonthYearSelector from "src/components/pages/Cartoes/month-year-selector.vue";
 
+import { useCartaoStore } from "../../stores/cartao-store.js";
+import { useFirestore, useCurrentUser } from "vuefire";
+import {
+  collection,
+  where,
+  and,
+  query,
+  getDocs,
+  orderBy,
+} from "firebase/firestore";
+
 const $q = useQuasar();
+const cartaoStore = useCartaoStore();
+const user = useCurrentUser();
+const db = useFirestore();
 
 const monthYearSelector_value = {
   day: "01",
@@ -92,54 +108,58 @@ const monthYearSelector_value = {
   ano: "1998",
 };
 
-const infoCartao = {
-  nome: "Caixa",
-  bColor: "#033f99",
-  limite: 2000,
-};
-
 const despesasDoMes = ref(0);
-const listaGastoCartao = ref([
-  {
-    id: 0,
-    descricao: "Kabum",
-    valorTotal: 2400.0,
-    parcelaAtual: 5,
-    parcelaTotal: 12,
-  },
-  {
-    id: 1,
-    descricao: "Mercado Livre",
-    valorTotal: 349.9,
-    parcelaAtual: 2,
-    parcelaTotal: 3,
-  },
-  {
-    id: 2,
-    descricao: "Shein",
-    valorTotal: 79.8,
-    parcelaAtual: 1,
-    parcelaTotal: 1,
-  },
-  {
-    id: 3,
-    descricao: "Riot Games",
-    valorTotal: 169.76,
-    parcelaAtual: 11,
-    parcelaTotal: 12,
-  },
-]);
+const listaGastoCartao = ref([]);
 
-onMounted(() => {
-  const currentDate = new Date();
+async function getGastosCartaoDB() {
+  $q.loading.show();
 
-  monthYearSelector_value.mes = currentDate.getMonth();
-  monthYearSelector_value.ano = currentDate.getUTCFullYear();
-});
+  despesasDoMes.value = 0;
+  listaGastoCartao.value = [];
+
+  const despesasQuery = query(
+    collection(db, "despesas"),
+    and(
+      where("tipo", "==", 0),
+      where("refUsuario", "==", String(user.value.uid)),
+      where("refCartao", "==", String(cartaoStore.id)),
+      where(
+        "dataFim",
+        ">=",
+        new Date(monthYearSelector_value.ano, monthYearSelector_value.mes, 1),
+      ),
+    ),
+  );
+
+  const despesasQuerySnapshot = await getDocs(despesasQuery);
+
+  for (const doc of despesasQuerySnapshot.docs) {
+    const dateDiff = date.getDateDiff(
+      new Date(monthYearSelector_value.ano, monthYearSelector_value.mes, 1),
+      doc.data().dataInicio.toDate().toDateString(),
+      "months",
+    );
+
+    if (dateDiff >= 0) {
+      listaGastoCartao.value.push({
+        id: doc.id,
+        descricao: doc.data().descricao,
+        valorTotal: doc.data().valorTotal,
+        parcelaAtual: dateDiff + 1,
+        parcelaTotal: doc.data().parcelas,
+      });
+      despesasDoMes.value += doc.data().valorTotal / doc.data().parcelas;
+    }
+  }
+
+  $q.loading.hide();
+}
 
 function monthYearSelector_valueChange({ mes, ano }) {
   monthYearSelector_value.mes = `${mes.id}`;
   monthYearSelector_value.ano = ano;
+
+  getGastosCartaoDB();
 }
 
 function formatarDinheiro(value) {
@@ -148,4 +168,13 @@ function formatarDinheiro(value) {
     currency: "BRL",
   });
 }
+
+onMounted(() => {
+  const currentDate = new Date();
+
+  monthYearSelector_value.mes = currentDate.getMonth();
+  monthYearSelector_value.ano = currentDate.getUTCFullYear();
+
+  getGastosCartaoDB();
+});
 </script>
