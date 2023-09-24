@@ -63,6 +63,7 @@
 <style lang="scss" scoped></style>
 
 <script setup>
+import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 
 import { onMounted, ref } from "vue";
@@ -82,6 +83,7 @@ import {
 const $q = useQuasar();
 const user = useCurrentUser();
 const db = useFirestore();
+const router = useRouter();
 
 let mesAtual = ref({ id: 6, label: "JUL" });
 let anoAtual = ref(1998);
@@ -102,10 +104,6 @@ const listaMeses = [
   { id: 10, label: "NOV" },
   { id: 11, label: "DEZ" },
 ];
-
-function btnClick_NovoGasto() {
-  console.log("NEW EXPENSE BTN CLICK");
-}
 
 async function getUserValorDisponivel() {
   $q.loading.show();
@@ -140,6 +138,10 @@ async function getUserDespesasMes(id) {
     valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
   }
   $q.loading.hide();
+}
+
+function btnClick_NovoGasto() {
+  router.push("despesas/cadastro");
 }
 
 function formatarDinheiro(value) {

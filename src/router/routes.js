@@ -47,9 +47,26 @@ const routes = [
       },
       {
         path: "/despesas",
-        name: "Despesas",
-        component: () => import("src/pages/ListaDespesas.vue"),
-        meta: { pageTitle: "Despesas", requiresAuth: true },
+        name: "DespesasRender",
+        component: { render: () => h(RouterView) },
+        children: [
+          {
+            path: "",
+            name: "Despesas",
+            component: () => import("src/pages/Despesas/ListaDespesas.vue"),
+            meta: { pageTitle: "Despesas", requiresAuth: true },
+          },
+          {
+            path: "cadastro",
+            name: "CadastrarDespesa",
+            component: () => import("src/pages/Despesas/CadastrarDespesa.vue"),
+            meta: {
+              pageTitle: "Nova Despesa",
+              requiresAuth: true,
+              showBackButton: true,
+            },
+          },
+        ],
       },
     ],
   },
