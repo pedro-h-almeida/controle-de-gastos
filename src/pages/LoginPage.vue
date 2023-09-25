@@ -88,7 +88,6 @@ function login() {
   signInWithEmailAndPassword(auth, input_email.value, input_password.value)
     .then((res) => {
       $q.loading.hide();
-      console.log(res);
       success();
     })
     .catch((error) => {

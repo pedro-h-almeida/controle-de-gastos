@@ -9,7 +9,9 @@ export const useDespesasStore = defineStore("despesas", () => {
   const dataInicio = ref(null);
   const dataFim = ref(null);
   const parcelas = ref(null);
-  const refCartao = ref("");
+  const refCartao = ref({});
+
+  const listaCartoes = ref([]);
 
   function $reset() {
     id.value = "";
@@ -19,7 +21,9 @@ export const useDespesasStore = defineStore("despesas", () => {
     dataInicio.value = null;
     dataFim.value = null;
     parcelas.value = null;
-    refCartao.value = "";
+    refCartao.value = {};
+
+    listaCartoes.value = [];
   }
 
   return {
@@ -32,5 +36,6 @@ export const useDespesasStore = defineStore("despesas", () => {
     dataFim,
     parcelas,
     refCartao,
+    listaCartoes,
   };
 });

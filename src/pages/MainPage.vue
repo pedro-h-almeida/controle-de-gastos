@@ -64,7 +64,7 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { useQuasar } from "quasar";
+import { useQuasar, date } from "quasar";
 
 import { onMounted, ref } from "vue";
 
@@ -111,7 +111,6 @@ async function getUserValorDisponivel() {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
     valorDisponivel.value = docSnap.data().valorDisponivel;
     for (const doc of docSnap.data().despesaFixa) {
       valorAtual.value += doc.valor;
@@ -134,8 +133,20 @@ async function getUserDespesasMes(id) {
 
   const despesasQuerySnapshot = await getDocs(despesasQuery);
 
+  // for (const doc of despesasQuerySnapshot.docs) {
+  //   valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
+  // }
+
   for (const doc of despesasQuerySnapshot.docs) {
-    valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
+    const dateDiff = date.getDateDiff(
+      new Date(anoAtual.value, mesAtual.value.id, 1),
+      doc.data().dataInicio.toDate().toDateString(),
+      "months",
+    );
+
+    if (dateDiff >= 0) {
+      valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
+    }
   }
   $q.loading.hide();
 }
