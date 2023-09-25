@@ -278,6 +278,7 @@ async function cadastrarDespesaCartao() {
   console.log("Document written with ID: ", docRef.id);
   // TODO definir para qual rota retornar
   // router.push("/cartoes");
+  router.back();
 }
 
 async function cadastrarDespesaDinheiro() {
@@ -298,6 +299,7 @@ async function cadastrarDespesaDinheiro() {
   console.log("Document written with ID: ", docRef.id);
   // TODO definir para qual rota retornar
   // router.push("/cartoes");
+  router.back();
 }
 
 async function cadastrarDespesaFixa() {
@@ -311,6 +313,7 @@ async function cadastrarDespesaFixa() {
   });
   // TODO definir para qual rota retornar
   // router.push("/cartoes");
+  router.back();
 }
 
 async function getCartoesDB() {
