@@ -6,6 +6,7 @@ export const useDespesasStore = defineStore("despesas", () => {
   const descricao = ref("");
   const valor = ref(null);
   const tipo = ref(null);
+  const despesaFixa = ref(false);
   const dataInicio = ref(null);
   const dataFim = ref(null);
   const parcelas = ref(null);
@@ -18,6 +19,7 @@ export const useDespesasStore = defineStore("despesas", () => {
     descricao.value = "";
     valor.value = null;
     tipo.value = null;
+    despesaFixa.value = false;
     dataInicio.value = null;
     dataFim.value = null;
     parcelas.value = null;
@@ -32,6 +34,7 @@ export const useDespesasStore = defineStore("despesas", () => {
     descricao,
     valor,
     tipo,
+    despesaFixa,
     dataInicio,
     dataFim,
     parcelas,

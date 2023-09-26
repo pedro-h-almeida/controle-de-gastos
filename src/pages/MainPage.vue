@@ -112,9 +112,6 @@ async function getUserValorDisponivel() {
 
   if (docSnap.exists()) {
     valorDisponivel.value = docSnap.data().valorDisponivel;
-    for (const doc of docSnap.data().despesaFixa) {
-      valorAtual.value += doc.valor;
-    }
     getUserDespesasMes();
   } else {
     console.log("No such document!");
@@ -144,7 +141,7 @@ async function getUserDespesasMes(id) {
       "months",
     );
 
-    if (dateDiff >= 0) {
+    if (dateDiff >= 0 || doc.data().despesaFixa) {
       valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
     }
   }
