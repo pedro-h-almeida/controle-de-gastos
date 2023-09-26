@@ -26,7 +26,8 @@ const routes = [
           {
             path: "detalhes",
             name: "DetalhesDoCartao",
-            component: () => import("src/pages/Cartoes/CartoesDespesas.vue"),
+            component: () =>
+              import("src/pages/Cartoes/CartoesDetalhesDespesas.vue"),
             meta: {
               pageTitle: "Detalhes do Cartão",
               requiresAuth: true,

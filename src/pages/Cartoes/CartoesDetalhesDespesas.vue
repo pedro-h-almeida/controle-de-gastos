@@ -33,20 +33,21 @@
                     </q-item-section>
 
                     <q-item-section side top>
-                      <q-item-label caption
-                        >{{ element.parcelaAtual }}/{{
-                          element.parcelaTotal
-                        }}</q-item-label
-                      >
+                      <q-item-label caption v-if="element.despesaFixa">
+                        Fixa
+                      </q-item-label>
+                      <q-item-label caption v-else>
+                        {{ element.parcelaAtual }}/{{ element.parcelaTotal }}
+                      </q-item-label>
                     </q-item-section>
                   </q-item>
                 </template>
               </template>
               <template v-else>
                 <q-item-section class="q-pa-md">
-                  <q-item-label class="text-h6 text-center"
-                    >Não a nenhum gasto neste mês, parabéns!</q-item-label
-                  >
+                  <q-item-label class="text-h6 text-center">
+                    Não a nenhum gasto neste mês, parabéns!
+                  </q-item-label>
                 </q-item-section>
               </template>
             </q-list>
@@ -133,13 +134,14 @@ async function getGastosCartaoDB() {
       "months",
     );
 
-    if (dateDiff >= 0) {
+    if (dateDiff >= 0 || doc.data().despesaFixa) {
       listaGastoCartao.value.push({
         id: doc.id,
         descricao: doc.data().descricao,
         valorTotal: doc.data().valorTotal,
         parcelaAtual: dateDiff + 1,
         parcelaTotal: doc.data().parcelas,
+        despesaFixa: doc.data().despesaFixa,
       });
       despesasDoMes.value += doc.data().valorTotal / doc.data().parcelas;
     }

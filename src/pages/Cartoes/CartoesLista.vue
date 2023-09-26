@@ -41,7 +41,7 @@
 <style lang="scss" scoped></style>
 
 <script setup>
-import { useQuasar } from "quasar";
+import { useQuasar, date } from "quasar";
 import { onMounted, onBeforeUnmount, ref } from "vue";
 import { useRouter } from "vue-router";
 import CartaoCardComponent from "src/components/pages/Cartoes/cartao-card.vue";
@@ -113,8 +113,16 @@ async function getGastosCartaoDB(id) {
   const despesasQuerySnapshot = await getDocs(despesasQuery);
 
   for (const doc of despesasQuerySnapshot.docs) {
-    gastos.total += doc.data().valorTotal;
-    gastos.mes += doc.data().valorTotal / doc.data().parcelas;
+    const dateDiff = date.getDateDiff(
+      new Date(monthYearSelector_value.ano, monthYearSelector_value.mes, 1),
+      doc.data().dataInicio.toDate().toDateString(),
+      "months",
+    );
+
+    if (dateDiff >= 0 || doc.data().despesaFixa) {
+      gastos.total += doc.data().valorTotal;
+      gastos.mes += doc.data().valorTotal / doc.data().parcelas;
+    }
   }
 
   return gastos;

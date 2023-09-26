@@ -15,19 +15,32 @@
             <div class="row">
               <div class="col-12">
                 <div class="row">
-                  <div class="text-weight-bolder">Atual:</div>
+                  <div class="text-weight-bolder">Mês:</div>
                   &nbsp;
                   <div class="">
-                    {{ formatarDinheiro(valorAtual) }}
+                    {{ formatarDinheiro(valorMes) }}
                   </div>
                 </div>
               </div>
-              <div class="col-12">
+              <div class="col-12 q-pt-sm">
                 <div class="row">
-                  <div class="text-weight-bolder">Disponível:</div>
-                  &nbsp;
-                  <div class="">
-                    {{ formatarDinheiro(valorDisponivel) }}
+                  <div class="col">
+                    <div class="row">
+                      <div class="text-weight-bolder">Disponível:</div>
+                      &nbsp;
+                      <div class="">
+                        {{ formatarDinheiro(valorDisponivel - valorMes) }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="row justify-end">
+                      <div class="text-weight-bolder">Total:</div>
+                      &nbsp;
+                      <div class="">
+                        {{ formatarDinheiro(valorTotal) }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -87,7 +100,8 @@ const router = useRouter();
 
 let mesAtual = ref({ id: 6, label: "JUL" });
 let anoAtual = ref(1998);
-const valorAtual = ref(0);
+const valorMes = ref(0);
+const valorTotal = ref(0);
 const valorDisponivel = ref(0);
 
 const listaMeses = [
@@ -130,10 +144,6 @@ async function getUserDespesasMes(id) {
 
   const despesasQuerySnapshot = await getDocs(despesasQuery);
 
-  // for (const doc of despesasQuerySnapshot.docs) {
-  //   valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
-  // }
-
   for (const doc of despesasQuerySnapshot.docs) {
     const dateDiff = date.getDateDiff(
       new Date(anoAtual.value, mesAtual.value.id, 1),
@@ -142,7 +152,8 @@ async function getUserDespesasMes(id) {
     );
 
     if (dateDiff >= 0 || doc.data().despesaFixa) {
-      valorAtual.value += doc.data().valorTotal / doc.data().parcelas;
+      valorTotal.value += doc.data().valorTotal;
+      valorMes.value += doc.data().valorTotal / doc.data().parcelas;
     }
   }
   $q.loading.hide();
