@@ -64,13 +64,6 @@
                   <div class="">{{ formatarDinheiro(despesasDoMes) }}</div>
                 </div>
               </div>
-              <div class="col">
-                <div class="row justify-end">
-                  <div class="text-weight-bolder">Limite:</div>
-                  &nbsp;
-                  <div class="">{{ formatarDinheiro(cartaoStore.limite) }}</div>
-                </div>
-              </div>
             </div>
           </q-card-section>
         </q-card>

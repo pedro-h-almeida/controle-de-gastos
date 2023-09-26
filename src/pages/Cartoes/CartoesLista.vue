@@ -21,7 +21,6 @@
           :cor="element.cor"
           :gastoTotal="element.gastoTotal"
           :gastoMes="element.gastoMes"
-          :limiteCartao="element.limiteCartao"
           @detalhesClick="btnClick_DetalhesCartao(element)"
         />
       </div>
@@ -89,7 +88,6 @@ async function getCartoesDB() {
       cor: doc.data().cor,
       gastoTotal: gastos.total,
       gastoMes: gastos.mes,
-      limiteCartao: doc.data().limite,
     });
   }
   $q.loading.hide();
@@ -133,7 +131,6 @@ function btnClick_DetalhesCartao(cartao) {
   cartaoStore.id = cartao.id;
   cartaoStore.descricao = cartao.descricao;
   cartaoStore.cor = cartao.cor;
-  cartaoStore.limite = cartao.limiteCartao;
   router.push("cartoes/detalhes");
 }
 

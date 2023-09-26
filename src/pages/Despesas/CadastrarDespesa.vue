@@ -131,22 +131,11 @@
             label="Cartão"
             v-model="despesasStore.refCartao"
             :options="despesasStore.listaCartoes"
-            :rules="[
-              (val) => (val && val !== null) || 'Obrigatório',
-              (val) =>
-                (val &&
-                  val.limiteCartao - val.gastoTotal >= despesasStore.valor) ||
-                'Sem Limite Disponível',
-            ]"
+            :rules="[(val) => (val && val !== null) || 'Obrigatório']"
           >
             <template v-slot:selected>
               <div v-if="despesasStore.refCartao">
-                {{ despesasStore.refCartao.label }} ({{
-                  formatarDinheiro(
-                    despesasStore.refCartao.limiteCartao -
-                      despesasStore.refCartao.gastoTotal,
-                  )
-                }})
+                {{ despesasStore.refCartao.label }}
               </div>
             </template>
             <template v-slot:option="scope">
@@ -159,14 +148,6 @@
                 </q-item-section>
                 <q-item-section>
                   <q-item-label>{{ scope.opt.label }}</q-item-label>
-                  <q-item-label caption
-                    >Disponível:
-                    {{
-                      formatarDinheiro(
-                        scope.opt.limiteCartao - scope.opt.gastoTotal,
-                      )
-                    }}</q-item-label
-                  >
                 </q-item-section>
               </q-item>
             </template>
@@ -301,7 +282,6 @@ async function getCartoesDB() {
       label: doc.data().descricao,
       cor: doc.data().cor,
       gastoTotal: gastos.total,
-      limiteCartao: doc.data().limite,
     });
   }
   $q.loading.hide();

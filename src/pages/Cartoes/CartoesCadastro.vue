@@ -18,30 +18,6 @@
         <div
           class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm"
         >
-          <QCurrencyInput
-            filled
-            clearable
-            label="Limite"
-            v-model="cartaoStore.limite"
-            lazy-rules
-            :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
-            :options="{
-              locale: 'pt-BR',
-              currency: 'BRL',
-              currencyDisplay: 'symbol',
-              precision: 2,
-              hideCurrencySymbolOnFocus: false,
-              hideGroupingSeparatorOnFocus: false,
-              hideNegligibleDecimalDigitsOnFocus: false,
-              autoDecimalDigits: true,
-              useGrouping: true,
-              accountingSign: false,
-            }"
-          />
-        </div>
-        <div
-          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm"
-        >
           <q-input
             filled
             label="Cor"
@@ -106,7 +82,6 @@ async function cadastrar() {
     {
       descricao: cartaoStore.descricao,
       cor: cartaoStore.cor,
-      limite: Number(cartaoStore.limite),
       createdAt: Timestamp.fromDate(new Date()),
     },
   );

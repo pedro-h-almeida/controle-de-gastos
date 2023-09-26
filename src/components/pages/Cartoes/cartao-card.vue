@@ -28,15 +28,6 @@
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="row justify-end">
-                <div class="text-weight-bolder">Limite:</div>
-                &nbsp;
-                <div class="">
-                  {{ formatarDinheiro(props.limiteCartao) }}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -64,7 +55,6 @@ const props = defineProps({
   cor: String,
   gastoTotal: Number,
   gastoMes: Number,
-  limiteCartao: Number,
 });
 const emit = defineEmits(["detalhesClick"]);
 
