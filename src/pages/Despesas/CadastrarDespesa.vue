@@ -263,7 +263,7 @@ async function cadastrar() {
 
   const docRef = await addDoc(collection(db, "despesas"), newDoc);
   console.log("Document written with ID: ", docRef.id);
-  // router.back();
+  router.back();
 }
 
 async function getCartoesDB() {
