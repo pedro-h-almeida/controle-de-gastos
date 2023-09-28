@@ -2,13 +2,16 @@
   <q-page class="q-pa-lg">
     <q-form @submit="cadastrar">
       <div class="row">
-        <!-- <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4"> -->
+        <!-- <div class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4"> -->
+        <!-- <div
+          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm"
+        > -->
 
         <!-- ############### -->
         <!-- Campo Descrição -->
         <!-- ############### -->
         <div
-          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4"
+          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-col-gutter-sm"
         >
           <q-input
             filled
@@ -23,7 +26,7 @@
         <!-- Campo Valor -->
         <!-- ########### -->
         <div
-          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm"
+          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm q-col-gutter-sm"
         >
           <QCurrencyInput
             filled
@@ -49,80 +52,89 @@
         <!-- ########## -->
         <!-- Campo Tipo -->
         <!-- ########## -->
-        <div class="col-7 q-pr-md q-pt-sm">
-          <q-select
-            filled
-            clearable
-            label="Tipo"
-            v-model="despesasStore.tipo"
-            :options="tipoOptions"
-            lazy-rules
-            :rules="[(val) => (val && val !== null) || 'Obrigatório']"
-          />
-        </div>
-        <!-- ############## -->
-        <!-- Campo Despesa Fixa -->
-        <!-- ############## -->
-        <div class="col-5 q-pt-sm">
-          <q-field filled v-model="despesasStore.despesaFixa">
-            <template v-slot:control>
-              <q-checkbox
-                label="Despesa Fixa"
-                v-model="despesasStore.despesaFixa"
-              />
-            </template>
-          </q-field>
+        <div
+          class="row col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm q-col-gutter-sm"
+        >
+          <div class="col-xs-12 col-sm-7">
+            <q-select
+              filled
+              clearable
+              label="Tipo"
+              v-model="despesasStore.tipo"
+              :options="tipoOptions"
+              lazy-rules
+              :rules="[(val) => (val && val !== null) || 'Obrigatório']"
+            />
+          </div>
+          <!-- ############## -->
+          <!-- Campo Despesa Fixa -->
+          <!-- ############## -->
+          <div class="col-xs-12 col-sm-5">
+            <q-field class="q-pb-lg" filled v-model="despesasStore.despesaFixa">
+              <template v-slot:control>
+                <q-checkbox
+                  label="Despesa Fixa"
+                  v-model="despesasStore.despesaFixa"
+                />
+              </template>
+            </q-field>
+          </div>
         </div>
 
-        <!-- ########## -->
-        <!-- Campo Data -->
-        <!-- ########## -->
         <div
-          class="col-7 q-pr-md q-pt-sm"
-          v-if="despesasStore.tipo && !despesasStore.despesaFixa"
+          class="row col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm q-col-gutter-sm"
         >
-          <q-input
-            filled
-            clearable
-            label="Data (Mes/Ano)"
-            v-model="despesasStore.dataInicio"
-            lazy-rules
-            mask="##/####"
-            :rules="[
-              (val) => (val && val.length > 0) || 'Obrigatório',
-              (val) =>
-                (Number(val.split('/')[0]) > 0 &&
-                  Number(val.split('/')[0]) <= 12) ||
-                'Mês inválido',
-            ]"
-          />
-        </div>
-        <!-- ############## -->
-        <!-- Campo Parcelas -->
-        <!-- ############## -->
-        <div
-          class="col-5 q-pt-sm"
-          v-if="
-            despesasStore.tipo &&
-            despesasStore.tipo.value === 0 &&
-            !despesasStore.despesaFixa
-          "
-        >
-          <q-input
-            filled
-            clearable
-            label="Parcelas"
-            v-model="despesasStore.parcelas"
-            lazy-rules
-            :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
-            type="number"
-          />
+          <!-- ########## -->
+          <!-- Campo Data -->
+          <!-- ########## -->
+          <div
+            class="col-xs-12 col-sm-8"
+            v-if="despesasStore.tipo && !despesasStore.despesaFixa"
+          >
+            <q-input
+              filled
+              clearable
+              label="Data (Mes/Ano)"
+              v-model="despesasStore.dataInicio"
+              lazy-rules
+              mask="##/####"
+              :rules="[
+                (val) => (val && val.length > 0) || 'Obrigatório',
+                (val) =>
+                  (Number(val.split('/')[0]) > 0 &&
+                    Number(val.split('/')[0]) <= 12) ||
+                  'Mês inválido',
+              ]"
+            />
+          </div>
+          <!-- ############## -->
+          <!-- Campo Parcelas -->
+          <!-- ############## -->
+
+          <div
+            class="col-xs-12 col-sm-4"
+            v-if="
+              despesasStore.tipo &&
+              despesasStore.tipo.value === 0 &&
+              !despesasStore.despesaFixa
+            "
+          >
+            <q-input
+              filled
+              clearable
+              label="Parcelas"
+              v-model="despesasStore.parcelas"
+              lazy-rules
+              :rules="[(val) => (val && val.length > 0) || 'Obrigatório']"
+              type="number"
+            />
+          </div>
         </div>
         <!-- ############ -->
         <!-- Campo Cartão -->
         <!-- ############ -->
         <div
-          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm"
+          class="col-xs-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 q-pt-sm q-col-gutter-sm"
           v-if="despesasStore.tipo && despesasStore.tipo.value === 0"
         >
           <q-select
@@ -159,7 +171,7 @@
         <!-- ############ -->
 
         <div
-          class="col-xs-8 offset-xs-4 col-sm-5 offset-sm-6 col-md-4 offset-md-6 col-lg-3 offset-lg-6 col-xl-2 offset-xl-6"
+          class="col-xs-8 offset-xs-4 col-sm-5 offset-sm-6 col-md-4 offset-md-6 col-lg-3 offset-lg-6 col-xl-2 offset-xl-6 q-col-gutter-sm"
         >
           <q-btn
             class="q-mt-lg full-width q-pa-sm"

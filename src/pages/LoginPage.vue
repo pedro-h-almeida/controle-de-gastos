@@ -80,8 +80,8 @@ const router = useRouter();
 const auth = useFirebaseAuth();
 
 const isPwd = ref(true);
-const input_email = ref("pedro.henrique.almeida.tey@gmail.com");
-const input_password = ref("6s&P5JeWL!6jTcJCsdK#");
+const input_email = ref("");
+const input_password = ref("");
 
 function login() {
   $q.loading.show();

@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-lg">
     <div class="row justify-center">
-      <div class="col-xs-12 col-md-6 col-lg-4 col-xl-2">
+      <div class="col-xs-12 col-md-6 col-lg-4">
         <q-card bordered>
           <!-- DATA/MES ATUAL -->
           <q-card-section>
@@ -55,6 +55,7 @@
               size="12px"
               label="Ir para detalhes"
               icon-right="fas fa-arrow-right"
+              @click="btnClick_IrDetalhes"
             />
           </q-card-actions>
         </q-card>
@@ -157,6 +158,10 @@ async function getUserDespesasMes(id) {
     }
   }
   $q.loading.hide();
+}
+
+function btnClick_IrDetalhes() {
+  router.push("despesas");
 }
 
 function btnClick_NovoGasto() {
